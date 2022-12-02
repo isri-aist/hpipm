@@ -41,6 +41,7 @@ set(CMAKE_INSTALL_PREFIX "/opt/hpipm" CACHE STRING "Installation path")
 project(hpipm C)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
+include(GNUInstallDirs)
 
 # Options
 
@@ -339,11 +340,11 @@ target_include_directories(hpipm
 target_link_libraries(hpipm blasfeo)
 
 install(TARGETS hpipm EXPORT hpipmConfig
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib
-	RUNTIME DESTINATION bin)
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
-install(EXPORT hpipmConfig DESTINATION cmake)
+install(EXPORT hpipmConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/hpipm")
 
 file(GLOB_RECURSE HPIPM_HEADERS "include/*.h")
 install(FILES ${HPIPM_HEADERS} DESTINATION ${HPIPM_HEADERS_INSTALLATION_DIRECTORY})
