@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+IS_64BIT:=$(shell file -b /bin/bash|grep "ELF 64-bit")
+ifeq ($(strip ${IS_64BIT}),)
+	HPIPM_TARGET:=GENERIC
+else
+	HPIPM_TARGET:=AVX
+endif
+
+%:
+	dh $@ --parallel --buildsystem=cmake
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr -DHPIPM_TESTING:BOOL=OFF -DTARGET=${HPIPM_TARGET}
