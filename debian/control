@@ -1,0 +1,21 @@
+Source: hpipm
+Priority: optional
+Maintainer: Pierre Gergondet <pierre.gergondet+ppa@gmail.com>
+Standards-Version: 3.9.5
+Section: libs
+Homepage: https://github.com/giaf/hpipm
+Build-Depends: debhelper (>= 9),
+               pkg-config,
+               cmake,
+               doxygen,
+               libblasfeo-dev,
+               graphviz
+
+Package: libhpipm-dev
+Section: libdevel
+Architecture: any
+Depends: cmake,
+         libblasfeo-dev,
+         ${shlibs:Depends},
+         ${misc:Depends}
+Description: High-performance interior-point method solver
