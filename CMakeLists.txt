@@ -91,34 +91,9 @@ if(NOT ${CMAKE_PROJECT_NAME} STREQUAL hpipm)
 	set(HPIPM_ALLOWED_REF_BLAS ${ALLOWED_REF_BLAS} PARENT_SCOPE)
 endif()
 
-# BLASFEO Option
-if(NOT TARGET blasfeo)
-	set(BLASFEO_PATH "/opt/blasfeo" CACHE STRING "BLASFEO installation path")
-	if(BUILD_SHARED_LIBS MATCHES OFF)
-		set(HPIPM_BLASFEO_LIB "Static" CACHE STRING "BLASFEO library link type")
-	else()
-		set(HPIPM_BLASFEO_LIB "Shared" CACHE STRING "BLASFEO library link type")
-	endif()
-
-	if(HPIPM_BLASFEO_LIB STREQUAL "Static")
-		add_library(blasfeo STATIC IMPORTED)
-		if(CMAKE_C_COMPILER_ID MATCHES MSVC)
-			set_target_properties(blasfeo PROPERTIES IMPORTED_LOCATION ${BLASFEO_PATH}/lib/blasfeo.lib)
-		else()
-			set_target_properties(blasfeo PROPERTIES IMPORTED_LOCATION ${BLASFEO_PATH}/lib/libblasfeo.a)
-		endif()
-	elseif(HPIPM_BLASFEO_LIB STREQUAL "Shared")
-		add_library(blasfeo SHARED IMPORTED)
-		if(CMAKE_C_COMPILER_ID MATCHES MSVC)
-			set_target_properties(blasfeo PROPERTIES IMPORTED_LOCATION ${BLASFEO_PATH}/lib/blasfeo.dll)
-		else()
-			set_target_properties(blasfeo PROPERTIES IMPORTED_LOCATION ${BLASFEO_PATH}/lib/libblasfeo.so)
-		endif()
-	endif()
-endif()
+find_package(blasfeo REQUIRED)
 
 # Needed to compile examples
-set(BLASFEO_INCLUDE_DIR "${BLASFEO_PATH}/include" CACHE STRING "Path to BLASFEO header files.")
 set(HPIPM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 # headers installation directory
@@ -332,12 +307,11 @@ set(HPIPM_SRC ${COND_SRC} ${DENSE_QP_SRC} ${IPM_CORE_SRC} ${OCP_QP_SRC} ${TREE_O
 add_library(hpipm ${HPIPM_SRC})
 
 target_include_directories(hpipm
-	PUBLIC
-		$<BUILD_INTERFACE:${HPIPM_INCLUDE_DIR}>
-		$<BUILD_INTERFACE:${BLASFEO_INCLUDE_DIR}>
-		$<INSTALL_INTERFACE:${HPIPM_HEADERS_INSTALLATION_DIRECTORY}>)
+  PUBLIC
+    $<BUILD_INTERFACE:${HPIPM_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${HPIPM_HEADERS_INSTALLATION_DIRECTORY}>)
 
-target_link_libraries(hpipm blasfeo)
+target_link_libraries(hpipm PUBLIC blasfeo)
 
 install(TARGETS hpipm EXPORT hpipmConfig
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
