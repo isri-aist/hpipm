@@ -97,7 +97,7 @@ find_package(blasfeo REQUIRED)
 set(HPIPM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 # headers installation directory
-set(HPIPM_HEADERS_INSTALLATION_DIRECTORY "include" CACHE STRING "Headers local installation directory")
+set(HPIPM_HEADERS_INSTALLATION_DIRECTORY "include/hpipm" CACHE STRING "Headers local installation directory")
 
 # enable runtine checks
 set(RUNTIME_CHECKS ON)
