@@ -133,6 +133,7 @@ if(NOT TARGET blasfeo)
 endif()
 
 # Needed to compile examples
+set(BLASFEO_INCLUDE_DIR "${BLASFEO_PATH}/include" CACHE STRING "Path to BLASFEO header files.")
 set(HPIPM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 # headers installation directory
@@ -359,9 +360,10 @@ set(HPIPM_SRC ${COND_SRC} ${DENSE_QP_SRC} ${IPM_CORE_SRC} ${OCP_QP_SRC} ${TREE_O
 add_library(hpipm ${HPIPM_SRC})
 
 target_include_directories(hpipm
-  PUBLIC
-    $<BUILD_INTERFACE:${HPIPM_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:${HPIPM_HEADERS_INSTALLATION_DIRECTORY}>)
+	PUBLIC
+		$<BUILD_INTERFACE:${HPIPM_INCLUDE_DIR}>
+		$<BUILD_INTERFACE:${BLASFEO_INCLUDE_DIR}/blasfeo>
+		$<INSTALL_INTERFACE:${HPIPM_HEADERS_INSTALLATION_DIRECTORY}>)
 
 target_link_libraries(hpipm PUBLIC blasfeo)
 
